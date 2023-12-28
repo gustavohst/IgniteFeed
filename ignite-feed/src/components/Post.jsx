@@ -4,14 +4,10 @@ import enUS from "date-fns/locale/en-US";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
-
-const comment = [1, 2];
+import { useState } from "react";
 
 export function Post({ author, publishedAt, content }) {
-  function handleCreateNewComent() {
-    event.preventDefault();
-    console.log("Teste");
-  }
+  const [comments, setComments] = useState([1, 2]);
 
   const publishedDateFormatted = format(publishedAt, "LLLL d 'at' HH:mm'h'", {
     locale: enUS,
@@ -20,6 +16,14 @@ export function Post({ author, publishedAt, content }) {
   const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
     locale: enUS,
   });
+
+  function handleCreateNewComent() {
+    event.preventDefault();
+
+    setComments([...comments, comments.length + 1]);
+
+    console.log(comments);
+  }
 
   return (
     <article className={styles.post}>
@@ -53,14 +57,16 @@ export function Post({ author, publishedAt, content }) {
 
       <form onSubmit={handleCreateNewComent} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
+
         <textarea placeholder="Let a comment" />
+
         <footer>
           <button type="submit">Publish</button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
-        {comment.map(() => {
+        {comments.map(() => {
           return <Comment />;
         })}
       </div>
